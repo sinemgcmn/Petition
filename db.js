@@ -5,10 +5,21 @@ const spicedPg = require("spiced-pg");
 // createdb petition
 const db = spicedPg("postgres:postgres:postgres@localhost:5432/petition");
 
-module.exports.getAllCities = () => {
+module.exports.getAllSign = () => {
     const q = `
-        SELECT *
+        SELECT first, last 
         FROM signatures
     `;
     return db.query(q);
+};
+
+module.exports.addSign = (first, last, signature) => {
+    const q = `
+        INSERT INTO signatures (first, last, signature)
+        VALUES ($1, $2, $3)
+        RETURNING id
+    `;
+    const params = [first, last, signature];
+    // console.log("q: ", q);
+    return db.query(q, params);
 };

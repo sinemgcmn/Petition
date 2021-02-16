@@ -7,7 +7,7 @@
 -- first we need to delete the old table (if it exists)
 DROP TABLE IF EXISTS signatures;
 
--- then we create a new table like so....
+
 
 CREATE TABLE signatures (
     id SERIAL PRIMARY KEY,

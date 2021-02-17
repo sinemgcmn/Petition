@@ -1,13 +1,18 @@
 <h1>Sign our petition to ....</h1>
 
 
-       <form method='POST' >
+    <form method='POST' >
             <input type='text' name='first' placeholder='First Name' autocomplete='off'>
             <input type='text' name='last' placeholder='Last Name' autocomplete='off'>
-            <input type='text' name='signature' placeholder='signature' style="width: 40%;" autocomplete='off'>
+            <input type='hidden' value='dataURL' name='signature' placeholder='signature' style="width: 40%;" autocomplete='off'>
+            <canvas id="myCanvas" width="400" height="200" style="border: 1px solid black"></canvas>
             
             <div>
                 <input type="submit" name="accept">
             </div>
             
-        </form>
+    </form>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="script.js"></script>

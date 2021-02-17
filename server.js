@@ -41,8 +41,31 @@ app.post("/", (req, res) => {
     }
 });
 
-// app.get("/thanks", (req, res) => {
-//     res.render("thanks");
-// });
+//renders the thanks.handlebars template
+//However this should only be visible to those that have signed,
+app.get("/thanks", (req, res) => {
+    if (req.cookies.authenticated) {
+        res.render("thanks");
+    } else {
+        res.redirect("/");
+    }
+});
+
+//redirect users to /petition if there is no cookie
+//SELECT first and last values of every person that has signed from the database and pass them to signers.handlebars
+
+app.get("/signers", (req, res) => {
+    const signersData = db
+        .getAllSign()
+        .then(({ rows }) => {
+            console.log("rows: ", rows);
+        })
+        .catch((err) => console.log(err));
+    if (!req.cookies.authenticated) {
+        res.redirect("/");
+    } else {
+        res.render("signers", { signersData });
+    }
+});
 
 app.listen(8080, () => console.log("Petition up and running...."));

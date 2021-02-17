@@ -55,16 +55,16 @@ app.get("/thanks", (req, res) => {
 //SELECT first and last values of every person that has signed from the database and pass them to signers.handlebars
 
 app.get("/signers", (req, res) => {
-    const signersData = db
-        .getAllSign()
-        .then(({ rows }) => {
-            console.log("rows: ", rows);
-        })
-        .catch((err) => console.log(err));
     if (!req.cookies.authenticated) {
         res.redirect("/");
     } else {
-        res.render("signers", { signersData });
+        db.getAllSign()
+            .then(({ rows, rowCount }) => {
+                console.log("rows and rowCount: ", rows, rowCount);
+                const signersData = rows;
+                res.render("signers", { signersData, rowCount });
+            })
+            .catch((err) => console.log(err));
     }
 });
 

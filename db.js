@@ -10,7 +10,11 @@ module.exports.getAllSign = () => {
         SELECT first, last 
         FROM signatures
     `;
-    return db.query(q);
+    const y = `
+        SELECT COUNT(*) 
+        FROM signatures
+    `;
+    return db.query(q, y);
 };
 
 module.exports.addSign = (first, last, signature) => {

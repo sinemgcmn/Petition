@@ -7,14 +7,29 @@ const db = spicedPg("postgres:postgres:postgres@localhost:5432/petition");
 
 module.exports.getAllSign = () => {
     const q = `
-        SELECT first, last, signature
+        SELECT first, last
         FROM signatures
     `;
-    const y = `
+
+    return db.query(q);
+};
+
+module.exports.getNum = () => {
+    const q = `
         SELECT COUNT(*) 
         FROM signatures
     `;
-    return db.query(q, y);
+
+    return db.query(q);
+};
+
+module.exports.getSign = (id) => {
+    const q = `
+        SELECT signature FROM signatures
+        WHERE id = $1
+    `;
+    const params = [id];
+    return db.query(q, params);
 };
 
 module.exports.addSign = (first, last, signature) => {

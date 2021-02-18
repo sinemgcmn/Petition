@@ -1,9 +1,14 @@
 <h2 class="container">Thank you for signing our petition to let know NBC and NETFLIX !!!</h2>
 
-<h3 class="container"><a href="/signers" class="thanksNum">See all '{{signersNum}}' The Office lovers & signers !!!</a></h3>
+{{#signersNum}}
+<h3 class="container"><a href="/signers" class="thanksNum">See all {{count}} The Office lovers & signers !!!</a></h3>
+{{/signersNum}}
+
 {{> youtube}}
 
-<img src="dataURL" alt="user's signature">
+{{#signs}}
+<img src="{{signature}}" alt="user's signature" width="500px">
+{{/signs}}
 
 <div class="box">
 <img src="prison-mike.jpg" alt="office photo" width="600" height="400">

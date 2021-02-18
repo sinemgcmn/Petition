@@ -1,4 +1,3 @@
-//petes lesson
 const express = require("express");
 const app = express();
 const db = require("./db");
@@ -16,6 +15,21 @@ app.use(
 );
 app.use(express.static("public"));
 
+///////////////////////////////////////////////////
+
+////////////REGISTRATION///////////////////////////
+
+app.get("/register", (req, res) => {
+    res.render("register");
+});
+
+////////////LOGIN///////////////////////////
+
+app.get("/login", (req, res) => {
+    res.render("login");
+});
+
+////////////PETITION///////////////////////////////
 app.get("/", (req, res) => {
     if (req.session.signatureId) {
         res.redirect("/thanks");
@@ -43,29 +57,39 @@ app.post("/", (req, res) => {
     }
 });
 
+////////////THANKS///////////////////////////////
+
 app.get("/thanks", (req, res) => {
-    if (req.session.signatureId) {
-        db.getAllSign()
-            .then(({ rowCount, signatureId }) => {
-                console.log("signatureId", signatureId);
-                const signersNum = rowCount;
-                res.render("thanks", { signersNum, signatureId });
-            })
-            .catch((err) => console.log(err));
-    } else {
-        res.redirect("/");
-    }
+    db.getNum()
+        .then(({ rows }) => {
+            let signersNum = rows;
+            console.log(signersNum);
+            // console.log("signerNum:", signersNum);
+            db.getSign(req.session.signatureId)
+                .then(({ rows }) => {
+                    let signs = rows;
+                    console.log(signs);
+                    res.render("thanks", {
+                        signersNum,
+                        signs,
+                    });
+                })
+                .catch((err) => console.log(err));
+        })
+        .catch((err) => console.log(err));
 });
+
+////////////SIGNERS///////////////////////////////
 
 app.get("/signers", (req, res) => {
     if (!req.session.signatureId) {
         res.redirect("/");
     } else {
         db.getAllSign()
-            .then(({ rows, rowCount }) => {
-                console.log("rows and rowCount: ", rows, rowCount);
+            .then(({ rows }) => {
+                // console.log("rows: ", rows);
                 const signersData = rows;
-                res.render("signers", { signersData, rowCount });
+                res.render("signers", { signersData });
             })
             .catch((err) => console.log(err));
     }

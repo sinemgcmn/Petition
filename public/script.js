@@ -2,6 +2,7 @@
 // console.log("sanity check");
 
 const myCanvas = $("#myCanvas");
+const hidden = $("#hiddden");
 
 const context = myCanvas[0].getContext("2d");
 
@@ -29,6 +30,9 @@ $(window).on("mouseup", (e) => {
         x = 0;
         y = 0;
         isMoving = false;
+        const dataURL = myCanvas[0].toDataURL();
+        hidden.val(dataURL);
+        console.log(dataURL);
     }
 });
 
@@ -42,7 +46,11 @@ function drawMyCanvas(context, x1, y1, x2, y2) {
     context.closePath();
 }
 
-const dataURL = myCanvas[0].toDataURL();
-console.log(dataURL);
+// function toImage() {
+//     $("#myImage").src = myCanvas.toDataURL();
+//     Canvas2Image.saveAsPNG(myCanvas);
+// }
 
-console.log("blaaaaa");
+// toImage();
+
+console.log("sannity check");

@@ -1,5 +1,12 @@
-<h1>Check out our signers!!!</h1>
+<h2 class="container">Check out our signers!!!</h2>
+<h3 class="container">{{rowCount}} People have already signed this petition! </h3>
+
+{{> youtube}}
+
+<div class="box">
+<img src="office-thanks.jpg" alt="office photo" width="600" height="400">
+</div>
 
 {{#signersData}}
-<p>{{first}} {{last}} </p>
+<div class="box">{{first}} {{last}} </div>
 {{/signersData}}

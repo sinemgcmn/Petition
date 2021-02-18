@@ -2,8 +2,7 @@
 // console.log("sanity check");
 
 const myCanvas = $("#myCanvas");
-const dataURL = myCanvas[0].toDataURL();
-console.log(dataURL);
+
 const context = myCanvas[0].getContext("2d");
 
 let isMoving = false;
@@ -42,3 +41,8 @@ function drawMyCanvas(context, x1, y1, x2, y2) {
     context.stroke();
     context.closePath();
 }
+
+const dataURL = myCanvas[0].toDataURL();
+console.log(dataURL);
+
+console.log("blaaaaa");

@@ -7,7 +7,7 @@ const db = spicedPg("postgres:postgres:postgres@localhost:5432/petition");
 
 module.exports.getAllSign = () => {
     const q = `
-        SELECT first, last 
+        SELECT first, last, signature
         FROM signatures
     `;
     const y = `

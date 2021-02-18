@@ -29,11 +29,12 @@ app.post("/", (req, res) => {
     if (accept) {
         db.addSign(req.body.firstname, req.body.lastname, req.body.signature)
             .then(({ rows }) => {
-                console.log("rows: ", rows);
+                // console.log("rows: ", rows);
                 req.session.signatureId = rows[0].id;
                 res.redirect("/thanks");
             })
             .catch((err) => {
+                console.log(err);
                 res.render("petition", {
                     warning: `Houston, we have a problem!!! 
                         You should fill out the form!`,
@@ -45,10 +46,10 @@ app.post("/", (req, res) => {
 app.get("/thanks", (req, res) => {
     if (req.session.signatureId) {
         db.getAllSign()
-            .then(({ rowCount }) => {
-                console.log("rowCount: ", rowCount);
+            .then(({ rowCount, signatureId }) => {
+                console.log("signatureId", signatureId);
                 const signersNum = rowCount;
-                res.render("thanks", { signersNum });
+                res.render("thanks", { signersNum, signatureId });
             })
             .catch((err) => console.log(err));
     } else {

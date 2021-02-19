@@ -2,7 +2,7 @@
 // console.log("sanity check");
 
 const myCanvas = $("#myCanvas");
-const hidden = $("#hiddden");
+const hidden = $("#hidden");
 
 const context = myCanvas[0].getContext("2d");
 
@@ -45,12 +45,5 @@ function drawMyCanvas(context, x1, y1, x2, y2) {
     context.stroke();
     context.closePath();
 }
-
-// function toImage() {
-//     $("#myImage").src = myCanvas.toDataURL();
-//     Canvas2Image.saveAsPNG(myCanvas);
-// }
-
-// toImage();
 
 console.log("sannity check");

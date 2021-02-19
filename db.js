@@ -1,14 +1,12 @@
 const spicedPg = require("spiced-pg");
-
-// for the demo, we will "talk" to the cities database you set up this morning
-// you will probably want a new database for the petition
-// createdb petition
 const db = spicedPg("postgres:postgres:postgres@localhost:5432/petition");
+
+////////PART 1/////////////////
 
 module.exports.getAllSign = () => {
     const q = `
-        SELECT first, last
-        FROM signatures
+        SELECT first_name, last_name
+        FROM users
     `;
 
     return db.query(q);
@@ -32,13 +30,35 @@ module.exports.getSign = (id) => {
     return db.query(q, params);
 };
 
-module.exports.addSign = (first, last, signature) => {
+module.exports.addSign = (signature) => {
     const q = `
-        INSERT INTO signatures (first, last, signature)
-        VALUES ($1, $2, $3)
+        INSERT INTO signatures (signature)
+        VALUES ($1)
         RETURNING id
     `;
-    const params = [first, last, signature];
+    const params = [signature];
     // console.log("q: ", q);
     return db.query(q, params);
+};
+
+/////////////PART-3/////////////////
+
+module.exports.regInputs = (first, last, email, password) => {
+    const q = `
+        INSERT INTO users (first_name, last_name, email, password_hash)
+        VALUES ($1, $2, $3, $4)
+        RETURNING id
+    `;
+    const params = [first, last, email, password];
+    // console.log("q: ", q);
+    return db.query(q, params);
+};
+
+module.exports.selectMail = () => {
+    const q = `
+        SELECT email
+        FROM users
+    `;
+
+    return db.query(q);
 };

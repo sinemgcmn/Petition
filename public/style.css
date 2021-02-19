@@ -1,6 +1,7 @@
 body {
     background-color: darkslateblue;
     color: white;
+    /* box-sizing: border-box; */
 }
 
 .container {
@@ -33,9 +34,14 @@ body {
 }
 
 canvas {
-    background-color: white;
+    background-color: rgb(208, 198, 198);
 }
 
 .thanksNum {
     color: white;
+}
+
+#urlimg {
+    width: 300px;
+    height: 100px;
 }

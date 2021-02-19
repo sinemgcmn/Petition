@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const db = require("./db");
 const hb = require("express-handlebars");
+const { hash, compare } = require("./utils/bc.js");
 const cookieSession = require("cookie-session");
 
 app.engine("handlebars", hb());
@@ -15,12 +16,29 @@ app.use(
 );
 app.use(express.static("public"));
 
-///////////////////////////////////////////////////
-
 ////////////REGISTRATION///////////////////////////
 
-app.get("/register", (req, res) => {
+app.get("/", (req, res) => {
     res.render("register");
+});
+
+app.post("/", (req, res) => {
+    const { first, last, email, password } = req.body;
+    hash(password).then((hashedPassword) => {
+        db.regInputs(first, last, email, hashedPassword)
+            .then(({ rows }) => {
+                console.log("rows: ", rows);
+                req.session.userId = rows[0].id;
+                res.redirect("/petition");
+            })
+            .catch((err) => {
+                console.log(err);
+                res.render("petition", {
+                    warning: `Houston, we have a problem!!!
+                        You should fill out the form!`,
+                });
+            });
+    });
 });
 
 ////////////LOGIN///////////////////////////
@@ -30,7 +48,7 @@ app.get("/login", (req, res) => {
 });
 
 ////////////PETITION///////////////////////////////
-app.get("/", (req, res) => {
+app.get("/petition", (req, res) => {
     if (req.session.signatureId) {
         res.redirect("/thanks");
     } else {
@@ -38,24 +56,24 @@ app.get("/", (req, res) => {
     }
 });
 
-app.post("/", (req, res) => {
-    const { firstname, lastname, signature, accept } = req.body;
-    if (accept) {
-        db.addSign(req.body.firstname, req.body.lastname, req.body.signature)
-            .then(({ rows }) => {
-                // console.log("rows: ", rows);
-                req.session.signatureId = rows[0].id;
-                res.redirect("/thanks");
-            })
-            .catch((err) => {
-                console.log(err);
-                res.render("petition", {
-                    warning: `Houston, we have a problem!!! 
-                        You should fill out the form!`,
-                });
-            });
-    }
-});
+// app.post("/petition", (req, res) => {
+//     const { signature, accept } = req.body;
+//     if (accept) {
+//         db.addSign(req.body.signature)
+//             .then(({ rows }) => {
+//                 // console.log("rows: ", rows);
+//                 req.session.signatureId = rows[0].id;
+//                 res.redirect("/thanks");
+//             })
+//             .catch((err) => {
+//                 console.log(err);
+//                 res.render("petition", {
+//                     warning: `Houston, we have a problem!!!
+//                         You should fill out the form!`,
+//                 });
+//             });
+//     }
+// });
 
 ////////////THANKS///////////////////////////////
 
@@ -96,3 +114,10 @@ app.get("/signers", (req, res) => {
 });
 
 app.listen(8080, () => console.log("Petition up and running...."));
+
+//    if (!first || !last || !email || password) {
+//        res.render("register", {
+//            warning: `Houston, we have a problem!!!
+//                         You should fill out the form!`,
+//        });
+//    }

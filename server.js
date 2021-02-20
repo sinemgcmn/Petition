@@ -64,20 +64,20 @@ app.post("/login", (req, res) => {
         } else if (rows) {
             db.selectPassword(email).then(({ rows }) => {
                 hash(password).then((hashedPassword) => {
-                    console.log(rows[0].password_hash);
-                    console.log(hashedPassword);
-
-                    // compare(
-                    //     rows, // Plain text from User
-                    //     hashedPassword // Hash from Database
-                    // ).then((match) => {
-                    //     if (match) {
-                    //         console.log("gir");
-                    //     } else {
-                    //         console.log(hashedPassword);
-                    //         console.log(rows);
-                    //     }
-                    // });
+                    return compare(
+                        rows[0].password_hash, // comesfrom db
+                        hashedPassword // inputed on page
+                    ).then((match) => {
+                        if (match) {
+                            // succesful login
+                            console.log("gir");
+                        } else {
+                            /// wrong password alert
+                            console.log(hashedPassword);
+                            console.log(rows[0].password_hash);
+                            console.log(match);
+                        }
+                    });
                 });
             });
         }

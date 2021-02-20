@@ -54,11 +54,24 @@ module.exports.regInputs = (first, last, email, password) => {
     return db.query(q, params);
 };
 
-module.exports.selectMail = () => {
+module.exports.selectMail = (input_email) => {
     const q = `
         SELECT email
-        FROM users
+        FROM users  
+        WHERE email = '${input_email}'
     `;
 
-    return db.query(q);
+    const params = input_email;
+    return db.query(q, params);
+};
+
+module.exports.selectPassword = (input_email) => {
+    const q = `
+        SELECT password_hash
+        FROM users
+        WHERE email = '${input_email}'
+    `;
+
+    const params = input_email;
+    return db.query(q, params);
 };

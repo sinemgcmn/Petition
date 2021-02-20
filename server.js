@@ -24,20 +24,19 @@ app.get("/", (req, res) => {
 
 app.post("/", (req, res) => {
     const { first, last, email, password } = req.body;
-    hash(password).then((hashedPassword) => {
-        db.regInputs(first, last, email, hashedPassword)
-            .then(({ rows }) => {
-                console.log("rows: ", rows);
-                req.session.userId = rows[0].id;
-                res.redirect("/petition");
-            })
-            .catch((err) => {
-                console.log(err);
-                res.render("petition", {
-                    warning: `Houston, we have a problem!!!
+    if (!first || !last || !email || !password) {
+        res.render("register", {
+            error: true,
+            warning: `Houston, we have a problem!!!
                         You should fill out the form!`,
-                });
-            });
+        });
+    }
+    hash(password).then((hashedPassword) => {
+        db.regInputs(first, last, email, hashedPassword).then(({ rows }) => {
+            // console.log("rows: ", rows);
+            req.session.userId = rows[0].id;
+            res.redirect("/petition");
+        });
     });
 });
 
@@ -45,6 +44,44 @@ app.post("/", (req, res) => {
 
 app.get("/login", (req, res) => {
     res.render("login");
+});
+
+app.post("/login", (req, res) => {
+    const { password, email } = req.body;
+    if (!email || !password) {
+        res.render("login", {
+            error: true,
+            warning: `Houston, we have a problem!!!
+                        You should fill out the form!`,
+        });
+    }
+    db.selectMail(email).then(({ rows }) => {
+        if (rows.length === 0) {
+            res.render("login", {
+                error: true,
+                warning: `This email does not exist`,
+            });
+        } else if (rows) {
+            db.selectPassword(email).then(({ rows }) => {
+                hash(password).then((hashedPassword) => {
+                    console.log(rows[0].password_hash);
+                    console.log(hashedPassword);
+
+                    // compare(
+                    //     rows, // Plain text from User
+                    //     hashedPassword // Hash from Database
+                    // ).then((match) => {
+                    //     if (match) {
+                    //         console.log("gir");
+                    //     } else {
+                    //         console.log(hashedPassword);
+                    //         console.log(rows);
+                    //     }
+                    // });
+                });
+            });
+        }
+    });
 });
 
 ////////////PETITION///////////////////////////////
@@ -121,3 +158,11 @@ app.listen(8080, () => console.log("Petition up and running...."));
 //                         You should fill out the form!`,
 //        });
 //    }
+
+//  .catch((err) => {
+//     console.log(err);
+//     res.render("register", {
+//         warning: `Houston, we have a problem!!!
+//             You should fill out the form!`,
+//     });
+// });

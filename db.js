@@ -65,13 +65,13 @@ module.exports.selectMail = (input_email) => {
     return db.query(q, params);
 };
 
-module.exports.selectPassword = (input_email) => {
+module.exports.selectPassword = (password) => {
     const q = `
         SELECT password_hash
         FROM users
-        WHERE email = '${input_email}'
+        WHERE  password_hash = '${password}'
     `;
 
-    const params = input_email;
+    const params = password;
     return db.query(q, params);
 };

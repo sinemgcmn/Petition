@@ -62,22 +62,27 @@ app.post("/login", (req, res) => {
                 warning: `This email does not exist`,
             });
         } else if (rows) {
-            db.selectPassword(email).then(({ rows }) => {
+            db.selectPassword(password).then(({ rows }) => {
                 hash(password).then((hashedPassword) => {
                     return compare(
                         rows[0].password_hash, // comesfrom db
                         hashedPassword // inputed on page
-                    ).then((match) => {
-                        if (match) {
-                            // succesful login
-                            console.log("gir");
-                        } else {
-                            /// wrong password alert
-                            console.log(hashedPassword);
-                            console.log(rows[0].password_hash);
-                            console.log(match);
-                        }
-                    });
+                    )
+                        .then((match) => {
+                            if (match) {
+                                // succesful login
+                                console.log("gir");
+                                res.redirect("/petition");
+                            } else {
+                                /// wrong password alert
+                                console.log(hashedPassword);
+                                console.log(rows[0].password_hash);
+                                console.log(match);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
                 });
             });
         }

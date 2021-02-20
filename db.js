@@ -30,13 +30,13 @@ module.exports.getSign = (id) => {
     return db.query(q, params);
 };
 
-module.exports.addSign = (signature) => {
+module.exports.addSign = (userId, signature) => {
     const q = `
-        INSERT INTO signatures (signature)
-        VALUES ($1)
+        INSERT INTO signatures (userid, signature)
+        VALUES ($1, $2)
         RETURNING id
     `;
-    const params = [signature];
+    const params = [userId, signature];
     // console.log("q: ", q);
     return db.query(q, params);
 };

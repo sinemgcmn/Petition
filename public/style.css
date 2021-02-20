@@ -4,6 +4,9 @@ body {
     /* box-sizing: border-box; */
 }
 
+#button {
+}
+
 .container {
     display: flex;
     justify-content: center;
@@ -30,7 +33,7 @@ body {
 
 .click {
     position: relative;
-    left: 45%;
+    left: 47%;
 }
 
 canvas {

@@ -1,13 +1,15 @@
 const express = require("express");
 const app = express();
-const db = require("./db");
-const hb = require("express-handlebars");
-const { hash, compare } = require("./utils/bc.js");
-const cookieSession = require("cookie-session");
 
+const db = require("./db");
+
+const hb = require("express-handlebars");
+
+const { hash, compare } = require("./utils/bc.js");
 app.engine("handlebars", hb());
 app.set("view engine", "handlebars");
 app.use(express.urlencoded({ extended: false }));
+const cookieSession = require("cookie-session");
 app.use(
     cookieSession({
         secret: `Hey this is my cookie-secret.`,
@@ -18,17 +20,21 @@ app.use(express.static("public"));
 
 ////////////REGISTRATION///////////////////////////
 
-app.get("/", (req, res) => {
-    res.render("register");
+app.get("/register", (req, res) => {
+    if (!req.session.userId && !req.session.signatureId) {
+        res.render("register");
+    } else {
+        res.render("thanks");
+    }
 });
 
-app.post("/", (req, res) => {
+app.post("/register", (req, res) => {
     const { first, last, email, password } = req.body;
     if (!first || !last || !email || !password) {
         res.render("register", {
             error: true,
             warning: `Houston, we have a problem!!!
-                        You should fill out the form!`,
+                    You should fill out the form!`,
         });
     }
     hash(password).then((hashedPassword) => {
@@ -63,27 +69,33 @@ app.post("/login", (req, res) => {
             });
         } else if (rows) {
             db.selectPassword(password).then(({ rows }) => {
-                hash(password).then((hashedPassword) => {
-                    return compare(
-                        rows[0].password_hash, // comesfrom db
-                        hashedPassword // inputed on page
-                    )
-                        .then((match) => {
+                hash(password)
+                    .then((hashedPassword) => {
+                        return compare(
+                            rows[0].password_hash, // comesfrom db
+                            hashedPassword // inputed on page
+                        ).then((match) => {
                             if (match) {
                                 // succesful login
-                                console.log("gir");
-                                res.redirect("/petition");
-                            } else {
-                                /// wrong password alert
-                                console.log(hashedPassword);
-                                console.log(rows[0].password_hash);
-                                console.log(match);
+                                req.session.userId = rows[0].id;
+                                if (
+                                    req.session.userId &&
+                                    req.session.signatureId
+                                ) {
+                                    res.redirect("/thanks");
+                                } else {
+                                    res.redirect("/petition");
+                                }
                             }
-                        })
-                        .catch((err) => {
-                            console.log(err);
                         });
-                });
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        res.render("login", {
+                            warning: `Houston, we have a problem!!!
+                            Password doesn't match!!!`,
+                        });
+                    });
             });
         }
     });
@@ -98,24 +110,23 @@ app.get("/petition", (req, res) => {
     }
 });
 
-// app.post("/petition", (req, res) => {
-//     const { signature, accept } = req.body;
-//     if (accept) {
-//         db.addSign(req.body.signature)
-//             .then(({ rows }) => {
-//                 // console.log("rows: ", rows);
-//                 req.session.signatureId = rows[0].id;
-//                 res.redirect("/thanks");
-//             })
-//             .catch((err) => {
-//                 console.log(err);
-//                 res.render("petition", {
-//                     warning: `Houston, we have a problem!!!
-//                         You should fill out the form!`,
-//                 });
-//             });
-//     }
-// });
+app.post("/petition", (req, res) => {
+    const { signature } = req.body;
+
+    db.addSign(req.session.userId, signature)
+        .then(({ rows }) => {
+            // console.log("rows: ", rows);
+            req.session.signatureId = rows[0].id;
+            res.redirect("/thanks");
+        })
+        .catch((err) => {
+            console.log(err);
+            res.render("petition", {
+                warning: `Houston, we have a problem!!!
+                        You should fill out the form!`,
+            });
+        });
+});
 
 ////////////THANKS///////////////////////////////
 
@@ -143,11 +154,10 @@ app.get("/thanks", (req, res) => {
 
 app.get("/signers", (req, res) => {
     if (!req.session.signatureId) {
-        res.redirect("/");
+        res.redirect("/petition");
     } else {
         db.getAllSign()
             .then(({ rows }) => {
-                // console.log("rows: ", rows);
                 const signersData = rows;
                 res.render("signers", { signersData });
             })
@@ -156,18 +166,3 @@ app.get("/signers", (req, res) => {
 });
 
 app.listen(8080, () => console.log("Petition up and running...."));
-
-//    if (!first || !last || !email || password) {
-//        res.render("register", {
-//            warning: `Houston, we have a problem!!!
-//                         You should fill out the form!`,
-//        });
-//    }
-
-//  .catch((err) => {
-//     console.log(err);
-//     res.render("register", {
-//         warning: `Houston, we have a problem!!!
-//             You should fill out the form!`,
-//     });
-// });

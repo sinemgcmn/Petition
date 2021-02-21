@@ -24,7 +24,7 @@ module.exports.getNum = () => {
 module.exports.getSign = (id) => {
     const q = `
         SELECT signature FROM signatures
-        WHERE id = $1
+        WHERE userid = $1
     `;
     const params = [id];
     return db.query(q, params);
@@ -34,7 +34,7 @@ module.exports.addSign = (userId, signature) => {
     const q = `
         INSERT INTO signatures (userid, signature)
         VALUES ($1, $2)
-        RETURNING id
+        RETURNING id;
     `;
     const params = [userId, signature];
     // console.log("q: ", q);
@@ -54,21 +54,10 @@ module.exports.regInputs = (first, last, email, password) => {
     return db.query(q, params);
 };
 
-module.exports.selectMail = (input_email) => {
+module.exports.selectPasswordAndMail = (email) => {
     const q = `
-        SELECT email
+        SELECT email, password_hash, id
         FROM users  
-        WHERE email = '${input_email}'
-    `;
-
-    const params = input_email;
-    return db.query(q, params);
-};
-
-module.exports.selectPassword = (email) => {
-    const q = `
-        SELECT password_hash
-        FROM users
         WHERE email = '${email}'
     `;
 

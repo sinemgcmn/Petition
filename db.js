@@ -5,8 +5,9 @@ const db = spicedPg("postgres:postgres:postgres@localhost:5432/petition");
 
 module.exports.getAllSign = () => {
     const q = `
-        SELECT first_name, last_name
-        FROM users
+        SELECT users.first_name, users.last_name
+        FROM signatures 
+        LEFT JOIN users ON (signatures.userid = users.id)
     `;
 
     return db.query(q);

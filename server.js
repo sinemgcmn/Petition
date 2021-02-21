@@ -143,16 +143,12 @@ app.get("/thanks", (req, res) => {
 ////////////SIGNERS///////////////////////////////
 
 app.get("/signers", (req, res) => {
-    if (!req.session.signatureId) {
-        res.redirect("/petition");
-    } else {
-        db.getAllSign()
-            .then(({ rows }) => {
-                const signersData = rows;
-                res.render("signers", { signersData });
-            })
-            .catch((err) => console.log(err));
-    }
+    db.getAllSign()
+        .then(({ rows }) => {
+            let allSignInfo = rows;
+            res.render("signers", { allSignInfo });
+        })
+        .catch((err) => console.log(err));
 });
 
 //////////////PROFILE/////////////////////////////

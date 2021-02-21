@@ -40,7 +40,7 @@ app.post("/register", (req, res) => {
     hash(password).then((hashedPassword) => {
         db.regInputs(first, last, email, hashedPassword).then(({ rows }) => {
             req.session.userId = rows[0].id;
-            res.redirect("/login");
+            res.redirect("/profile");
         });
     });
 });
@@ -104,7 +104,6 @@ app.post("/petition", (req, res) => {
 
     db.addSign(req.session.userId, signature)
         .then(({ rows }) => {
-            console.log("rows: ", rows);
             req.session.signatureId = rows[0].id;
             res.redirect("/thanks");
         })
@@ -129,7 +128,7 @@ app.get("/thanks", (req, res) => {
             db.getSign(req.session.signatureId)
                 .then(({ rows }) => {
                     let signs = rows;
-                    console.log(signs);
+                    console.log("sdsd", req.session.signatureId);
                     res.render("thanks", {
                         signersNum,
                         signs,
@@ -155,6 +154,29 @@ app.get("/signers", (req, res) => {
 
 app.get("/profile", (req, res) => {
     res.render("profile");
+});
+
+app.post("/profile", (req, res) => {
+    const { age, city, homepage } = req.body;
+    let urltoInsert = homepage;
+    if (
+        !urltoInsert.startsWith("http://") &&
+        !urltoInsert.startsWith("https://")
+    ) {
+        urltoInsert = "https://" + urltoInsert;
+    }
+    db.reqUserInfo(age, city, urltoInsert, req.session.userId).then(
+        ({ rows }) => {
+            console.log("rows: ", rows);
+            req.session.userId = rows[0].userid;
+            res.redirect("/login"); ////???
+        }
+    );
+});
+
+app.get("/signers/:city/", (req, res) => {
+    // const city = req.params.city;
+    // console.log(city);
 });
 
 app.listen(8080, () => console.log("Petition up and running...."));

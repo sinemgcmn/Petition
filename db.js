@@ -5,9 +5,12 @@ const db = spicedPg("postgres:postgres:postgres@localhost:5432/petition");
 
 module.exports.getAllSign = () => {
     const q = `
-        SELECT users.first_name, users.last_name
+        SELECT users.first_name, users.last_name, 
+            user_profiles.age, user_profiles.city, 
+            user_profiles.url
         FROM signatures 
         LEFT JOIN users ON (signatures.userid = users.id)
+        LEFT JOIN user_profiles ON (signatures.userid = user_profiles.userid)
     `;
 
     return db.query(q);
@@ -25,9 +28,9 @@ module.exports.getNum = () => {
 module.exports.getSign = (id) => {
     const q = `
         SELECT signature FROM signatures
-        WHERE userid = $1
+        WHERE id = '${id}'
     `;
-    const params = [id];
+    const params = id;
     return db.query(q, params);
 };
 
@@ -65,3 +68,23 @@ module.exports.selectPasswordAndMail = (email) => {
     const params = email;
     return db.query(q, params);
 };
+
+/////////////PART-4/////////////////
+
+//INSERTinto user_profiles
+
+module.exports.reqUserInfo = (age, city, homepage, userId) => {
+    const q = `
+        INSERT INTO user_profiles (age, city, url, userid)
+        VALUES ($1, $2, $3, $4)
+        RETURNING userid
+    `;
+    const params = [age, city, homepage, userId];
+    // console.log("q: ", q);
+    return db.query(q, params);
+};
+
+//SELECT in /signers to get name, age, city, url of all who signed
+//we have to JOIN 3 tables here!!!
+
+//SELECT in signers by city is basically the same as above but with a conditional

@@ -4,9 +4,6 @@ body {
     /* box-sizing: border-box; */
 }
 
-#button {
-}
-
 .container {
     display: flex;
     justify-content: center;
@@ -37,7 +34,7 @@ body {
 }
 
 canvas {
-    background-color: rgb(208, 198, 198);
+    background-color: white;
 }
 
 .thanksNum {

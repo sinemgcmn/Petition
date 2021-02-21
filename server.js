@@ -24,7 +24,7 @@ app.get("/register", (req, res) => {
     if (!req.session.userId && !req.session.signatureId) {
         res.render("register");
     } else {
-        res.render("thanks");
+        res.redirect("/thanks");
     }
 });
 
@@ -41,7 +41,7 @@ app.post("/register", (req, res) => {
         db.regInputs(first, last, email, hashedPassword).then(({ rows }) => {
             // console.log("rows: ", rows);
             req.session.userId = rows[0].id;
-            res.redirect("/petition");
+            res.redirect("/profile");
         });
     });
 });
@@ -68,32 +68,32 @@ app.post("/login", (req, res) => {
                 warning: `This email does not exist`,
             });
         } else if (rows) {
-            db.selectPassword(password).then(({ rows }) => {
-                hash(password)
-                    .then((hashedPassword) => {
-                        return compare(
-                            rows[0].password_hash, // comesfrom db
-                            hashedPassword // inputed on page
-                        ).then((match) => {
-                            if (match) {
-                                // succesful login
-                                req.session.userId = rows[0].id;
-                                if (
-                                    req.session.userId &&
-                                    req.session.signatureId
-                                ) {
-                                    res.redirect("/thanks");
-                                } else {
-                                    res.redirect("/petition");
-                                }
-                            }
-                        });
+            db.selectPassword(email).then(({ rows }) => {
+                return compare(password, rows[0].password_hash)
+                    .then((match) => {
+                        if (match) {
+                            // succesful login
+                            // req.session.userId = rows[0].id;
+                            // if (
+                            //     req.session.userId &&
+                            //     req.session.signatureId
+                            // ) {
+                            //     res.redirect("/thanks");
+                            // } else {
+                            res.redirect("/petition");
+                            // }
+                        } else {
+                            res.render("login", {
+                                warning: `Houston, we have a problem!!!
+                            Password doesn't match!!!`,
+                            });
+                        }
                     })
+
                     .catch((err) => {
                         console.log(err);
                         res.render("login", {
-                            warning: `Houston, we have a problem!!!
-                            Password doesn't match!!!`,
+                            warning: `Something bad happened!!!`,
                         });
                     });
             });
@@ -163,6 +163,12 @@ app.get("/signers", (req, res) => {
             })
             .catch((err) => console.log(err));
     }
+});
+
+//////////////PROFILE/////////////////////////////
+
+app.get("/profile", (req, res) => {
+    res.render("profile");
 });
 
 app.listen(8080, () => console.log("Petition up and running...."));

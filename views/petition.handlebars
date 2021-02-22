@@ -2,7 +2,7 @@
 <h1 class="container" style="color:rgb(204, 50, 199)"> Please sign and share this to let them know the fans don’t want that!</h1>
 
 <div class="container">
-    <h2>As of January 2021 NBC will not longer allow The Office to be streamed on Netflix but rather only on their own streaming platform!</h2>
+    <h2>As of March 2021 NBC will not longer allow The Office to be streamed on Netflix but rather only on their own streaming platform!</h2>
 </div>
 
 <h2 class="container" style="color:darkorchid">{{warning}}</h2>
@@ -23,6 +23,7 @@
     <form method='POST' >
             <input id="hidden" type='hidden' name='signature' placeholder='signature' autocomplete='off'>
             <canvas id="myCanvas" width="400" height="200" style="border: 1px solid black"></canvas>
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
             <div>
            <button class="click" type='submit' name="accept">SUBMIT</button>
            </div>

@@ -8,14 +8,22 @@ const hb = require("express-handlebars");
 const { hash, compare } = require("./utils/bc.js");
 app.engine("handlebars", hb());
 app.set("view engine", "handlebars");
-app.use(express.urlencoded({ extended: false }));
+
 const cookieSession = require("cookie-session");
+const csurf = require("csurf");
 app.use(
     cookieSession({
         secret: `Hey this is my cookie-secret.`,
         maxAge: 1000 * 60 * 60 * 24 * 14,
     })
 );
+app.use(express.urlencoded({ extended: false }));
+app.use(csurf());
+app.use(function (req, res, next) {
+    res.locals.csrfToken = req.csrfToken();
+    next();
+});
+
 app.use(express.static("public"));
 
 ////////////REGISTRATION///////////////////////////
@@ -169,7 +177,7 @@ app.post("/profile", (req, res) => {
         ({ rows }) => {
             console.log("rows: ", rows);
             req.session.userId = rows[0].userid;
-            res.redirect("/login"); ////???
+            res.redirect("/login");
         }
     );
 });
@@ -183,6 +191,12 @@ app.get("/signers/:city/", (req, res) => {
             res.render("city", { allCityInfo });
         })
         .catch((err) => console.log(err));
+});
+
+////////////////EDIT/////////////////////////////////
+
+app.get("/edit", (req, res) => {
+    res.render("edit");
 });
 
 app.listen(8080, () => console.log("Petition up and running...."));

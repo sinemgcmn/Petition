@@ -84,7 +84,17 @@ module.exports.reqUserInfo = (age, city, homepage, userId) => {
     return db.query(q, params);
 };
 
-//SELECT in /signers to get name, age, city, url of all who signed
-//we have to JOIN 3 tables here!!!
-
 //SELECT in signers by city is basically the same as above but with a conditional
+module.exports.signersByCity = (city) => {
+    const q = `
+        SELECT users.first_name, users.last_name, 
+            user_profiles.age, user_profiles.city, 
+            user_profiles.url
+        FROM signatures 
+        LEFT JOIN users ON (signatures.userid = users.id)
+        LEFT JOIN user_profiles ON (signatures.userid = user_profiles.userid)
+        WHERE LOWER(city) = LOWER('${city}')
+    `;
+    const params = city;
+    return db.query(q, params);
+};

@@ -199,4 +199,6 @@ app.get("/edit", (req, res) => {
     res.render("edit");
 });
 
-app.listen(8080, () => console.log("Petition up and running...."));
+app.listen(process.env.PORT || 8080, () =>
+    console.log("Petition up and running....")
+);

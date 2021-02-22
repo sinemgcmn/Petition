@@ -174,9 +174,9 @@ app.post("/profile", (req, res) => {
     );
 });
 
-app.get("/signers/:city/", (req, res) => {
-    // const city = req.params.city;
-    // console.log(city);
-});
+// app.get("/signers/:city/", (req, res) => {
+//     // const city = req.params.city;
+//     // console.log(city);
+// });
 
 app.listen(8080, () => console.log("Petition up and running...."));

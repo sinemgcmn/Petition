@@ -1,7 +1,31 @@
 body {
-    background-color: darkslateblue;
+    background-image: url("office.jpg");
+    background-position: center;
     color: white;
+
     /* box-sizing: border-box; */
+}
+
+input {
+    font-size: 15px;
+    height: 40px;
+    width: 200px;
+    color: darkslategrey;
+    margin: 10px 10px;
+    border-width: 2px;
+    border-color: darkslategrey;
+}
+
+input:focus {
+    outline-color: rgb(204, 50, 199);
+}
+
+button {
+    position: absolute;
+    left: 45%;
+    height: 40px;
+    width: 120px;
+    background-color: darkslategrey;
 }
 
 .container {
@@ -19,6 +43,7 @@ body {
 .formPart {
     display: flex;
     justify-content: center;
+    position: relative;
     padding: 20px 30px;
 }
 
@@ -28,10 +53,10 @@ body {
     padding: 10px 0px;
 }
 
-.click {
+/* .click {
     position: relative;
-    left: 47%;
-}
+    left: 160px;
+} */
 
 canvas {
     background-color: white;

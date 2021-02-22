@@ -7,8 +7,6 @@
 
 {{> youtube}}
 
-
-
 <div class="container">
 <img src="https://i.gifer.com/origin/18/1816050fd6b00e00051bca8f9db913c4.gif" width=480 height=270.880 ></img>
 </div>
@@ -16,5 +14,7 @@
 
 
 {{#allSignInfo}}
-<div class="box">{{first_name}} {{last_name}} {{age}} {{city}} {{url}}</div>
+<div class="box">
+    <p><a href="{{url}}" target="_blank">{{first_name}} {{last_name}}</a> {{age}} {{city}}</p>
+</div>
 {{/allSignInfo}}

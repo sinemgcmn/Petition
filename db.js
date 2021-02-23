@@ -31,8 +31,8 @@ module.exports.getNum = () => {
 
 module.exports.getSign = (id) => {
     const q = `
-        SELECT signature FROM signatures
-        WHERE id = '${id}'
+        SELECT signature, id FROM signatures
+        WHERE userid = ${id}
     `;
     const params = id;
     return db.query(q, params);

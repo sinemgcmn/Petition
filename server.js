@@ -80,8 +80,10 @@ app.post("/login", (req, res) => {
                 if (match) {
                     // successsful login
                     req.session.userId = rows[0].id;
-
+                    // console.log(req.session.userId);
                     db.getSign(req.session.userId).then(({ rows }) => {
+                        req.session.signatureId = rows[0].id;
+                        // console.log(rows.length);
                         if (rows.length === 0) {
                             res.redirect("/petition");
                         } else {
@@ -130,19 +132,21 @@ app.post("/petition", (req, res) => {
 ////////////THANKS///////////////////////////////
 
 app.get("/thanks", (req, res) => {
+    console.log(req.session.signatureId);
     if (!req.session.userId && !req.session.signatureId) {
         res.redirect("/register");
     } else if (req.session.userId && req.session.signatureId) {
+        console.log("buraya");
         db.getNum()
             .then(({ rows }) => {
                 console.log(rows);
                 let signersNum = rows;
                 console.log(signersNum);
                 // console.log("signerNum:", signersNum);
-                db.getSign(req.session.signatureId)
+                db.getSign(req.session.userId)
                     .then(({ rows }) => {
                         let signs = rows;
-                        console.log("sdsd", req.session.signatureId);
+                        console.log("sdsd", req.session.userId);
                         res.render("thanks", {
                             signersNum,
                             signs,
@@ -198,14 +202,18 @@ app.post("/profile", (req, res) => {
 });
 
 app.get("/signers/:city/", (req, res) => {
-    const city = req.params.city;
-    console.log(city);
-    db.signersByCity(city)
-        .then(({ rows }) => {
-            let allCityInfo = rows;
-            res.render("city", { allCityInfo });
-        })
-        .catch((err) => console.log(err));
+    if (!req.session.userId && !req.session.signatureId) {
+        res.redirect("/register");
+    } else {
+        const city = req.params.city;
+        console.log(city);
+        db.signersByCity(city)
+            .then(({ rows }) => {
+                let allCityInfo = rows;
+                res.render("city", { allCityInfo });
+            })
+            .catch((err) => console.log(err));
+    }
 });
 
 ////////////////EDIT/////////////////////////////////

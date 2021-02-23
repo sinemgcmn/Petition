@@ -82,11 +82,10 @@ app.post("/login", (req, res) => {
                     req.session.userId = rows[0].id;
                     // console.log(req.session.userId);
                     db.getSign(req.session.userId).then(({ rows }) => {
-                        req.session.signatureId = rows[0].id;
-                        // console.log(rows.length);
                         if (rows.length === 0) {
                             res.redirect("/petition");
                         } else {
+                            req.session.signatureId = rows[0].id;
                             res.redirect("/thanks");
                         }
                     });

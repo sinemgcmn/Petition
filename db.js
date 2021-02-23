@@ -116,3 +116,45 @@ module.exports.getInfoEdit = (userId) => {
     const params = userId;
     return db.query(q, params);
 };
+
+module.exports.updateUserWithoutPassword = (first, last, userId, email) => {
+    const q = `
+        UPDATE users
+        SET first_name = $1, last_name = $2, 
+        email = $4
+        WHERE id = $3;
+    `;
+    const params = [first, last, userId, email];
+    return db.query(q, params);
+};
+
+module.exports.updateProfileWithoutPassword = (age, city, url, userId) => {
+    const q = `
+        INSERT INTO user_profiles (age, city, url, userid)
+        VALUES ($1, $2, $3, $4)
+        ON CONFLICT (userId)
+        DO UPDATE SET age = $1, city = $2, url = $3;
+    `;
+    const params = [age, city, url, userId];
+    return db.query(q, params);
+};
+
+module.exports.updatePassword = (userId, password) => {
+    const q = `
+        UPDATE users
+        SET password_hash = $2
+        WHERE id = $1;
+    `;
+    const params = [userId, password];
+    return db.query(q, params);
+};
+
+module.exports.getPasswordwithId = (userId) => {
+    const q = `
+        SELECT password_hash
+        FROM users  
+        WHERE id = ${userId}
+    `;
+    const params = userId;
+    return db.query(q, params);
+};

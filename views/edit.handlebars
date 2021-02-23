@@ -5,7 +5,10 @@
     <h2>As of March 2021 NBC will not longer allow The Office to be streamed on Netflix but rather only on their own streaming platform!<br> </h2>
 </div>
 
-<div id="edit">
+
+
+<form method='POST'>
+{{#allEditInfo}}
 <input type='text' name='first' autocomplete='off' value="{{first_name}}">
 <input type='text' name='last' autocomplete='off' value="{{last_name}}">
 <input type='text' name='email' autocomplete='off' value="{{email}}">
@@ -13,9 +16,9 @@
 <input type='text' name='age' autocomplete='off' value="{{age}}">
 <input type='text' name='city' autocomplete='off' value="{{city}}">
 <input type='text' name='homepage' autocomplete='off' value="{{url}}">
+{{/allEditInfo}}
 <input type="hidden" name="_csrf" value="{{csrfToken}}">
-
-</div>
 <div>            
 <button class="click" type='submit' name="accept">UPDATE</button>
 </div>
+</form>

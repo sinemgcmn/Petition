@@ -217,9 +217,39 @@ app.get("/signers/:city/", (req, res) => {
 
 ////////////////EDIT/////////////////////////////////
 
-// app.get("/edit", (req, res) => {
-//     res.render("edit");
-// });
+app.get("/profile/edit", (req, res) => {
+    db.getInfoEdit(req.session.userId).then(({ rows }) => {
+        let allEditInfo = rows;
+        res.render("edit", { allEditInfo });
+    });
+});
+
+app.post("/profile/edit", (req, res) => {
+    if (req.body.password === "") {
+        db.updateUserWithoutPassword(
+            req.body.first,
+            req.body.last,
+            req.session.userId,
+            req.body.email
+        );
+        db.updateProfileWithoutPassword(
+            req.body.age,
+            req.body.city,
+            req.body.homepage,
+            req.session.userId
+        );
+    } else {
+        db.getPasswordwithId(req.session.userId).then(({ rows }) => {
+            compare(req.body.password, rows[0].password_hash).then((match) => {
+                if (!match) {
+                    hash(req.body.password).then((hashedPassword) => {
+                        db.updatePassword(req.session.userId, hashedPassword);
+                    });
+                }
+            });
+        });
+    }
+});
 
 app.listen(process.env.PORT || 8080, () =>
     console.log("Petition up and running....")

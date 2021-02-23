@@ -128,35 +128,43 @@ app.post("/petition", (req, res) => {
 ////////////THANKS///////////////////////////////
 
 app.get("/thanks", (req, res) => {
-    db.getNum()
-        .then(({ rows }) => {
-            console.log(rows);
-            let signersNum = rows;
-            console.log(signersNum);
-            // console.log("signerNum:", signersNum);
-            db.getSign(req.session.signatureId)
-                .then(({ rows }) => {
-                    let signs = rows;
-                    console.log("sdsd", req.session.signatureId);
-                    res.render("thanks", {
-                        signersNum,
-                        signs,
-                    });
-                })
-                .catch((err) => console.log(err));
-        })
-        .catch((err) => console.log(err));
+    if (!req.session.userId && !req.session.signatureId) {
+        res.redirect("/register");
+    } else if (req.session.userId && req.session.signatureId) {
+        db.getNum()
+            .then(({ rows }) => {
+                console.log(rows);
+                let signersNum = rows;
+                console.log(signersNum);
+                // console.log("signerNum:", signersNum);
+                db.getSign(req.session.signatureId)
+                    .then(({ rows }) => {
+                        let signs = rows;
+                        console.log("sdsd", req.session.signatureId);
+                        res.render("thanks", {
+                            signersNum,
+                            signs,
+                        });
+                    })
+                    .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+    }
 });
 
 ////////////SIGNERS///////////////////////////////
 
 app.get("/signers", (req, res) => {
-    db.getAllSign()
-        .then(({ rows }) => {
-            let allSignInfo = rows;
-            res.render("signers", { allSignInfo });
-        })
-        .catch((err) => console.log(err));
+    if (!req.session.userId && !req.session.signatureId) {
+        res.redirect("/register");
+    } else if (req.session.userId && req.session.signatureId) {
+        db.getAllSign()
+            .then(({ rows }) => {
+                let allSignInfo = rows;
+                res.render("signers", { allSignInfo });
+            })
+            .catch((err) => console.log(err));
+    }
 });
 
 //////////////PROFILE/////////////////////////////

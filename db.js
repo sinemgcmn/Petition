@@ -102,3 +102,17 @@ module.exports.signersByCity = (city) => {
     const params = city;
     return db.query(q, params);
 };
+
+module.exports.getInfoEdit = (userId) => {
+    const q = `
+        SELECT users.first_name, users.last_name,
+            users.email, user_profiles.age, user_profiles.city,
+            user_profiles.url
+        FROM users
+        LEFT JOIN user_profiles ON (user_profiles.userid = users.id)
+        WHERE users.id = '${userId}'
+
+    `;
+    const params = userId;
+    return db.query(q, params);
+};

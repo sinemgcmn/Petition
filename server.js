@@ -1,22 +1,19 @@
 const express = require("express");
 const app = express();
-
 const db = require("./db");
-
 const hb = require("express-handlebars");
-
 const { hash, compare } = require("./utils/bc.js");
-app.engine("handlebars", hb());
-app.set("view engine", "handlebars");
-
 const cookieSession = require("cookie-session");
 const csurf = require("csurf");
+app.engine("handlebars", hb());
+app.set("view engine", "handlebars");
 app.use(
     cookieSession({
         secret: `Hey this is my cookie-secret.`,
         maxAge: 1000 * 60 * 60 * 24 * 14,
     })
 );
+app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(csurf());
 app.use(function (req, res, next) {
@@ -24,14 +21,18 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use(express.static("public"));
-
 ////////////REGISTRATION///////////////////////////
+
+app.get("/", (req, res) => {
+    res.redirect("/register");
+});
 
 app.get("/register", (req, res) => {
     if (!req.session.userId && !req.session.signatureId) {
         res.render("register");
-    } else {
+    } else if (req.session.userId && !req.session.signatureId) {
+        res.redirect("/petition");
+    } else if (req.session.userId && req.session.signatureId) {
         res.redirect("/thanks");
     }
 });
@@ -113,7 +114,7 @@ app.post("/petition", (req, res) => {
     db.addSign(req.session.userId, signature)
         .then(({ rows }) => {
             req.session.signatureId = rows[0].id;
-            res.redirect("/thanks");
+            res.redirect("/thanks"); //////????????????
         })
         .catch((err) => {
             console.log(err);
@@ -195,9 +196,9 @@ app.get("/signers/:city/", (req, res) => {
 
 ////////////////EDIT/////////////////////////////////
 
-app.get("/edit", (req, res) => {
-    res.render("edit");
-});
+// app.get("/edit", (req, res) => {
+//     res.render("edit");
+// });
 
 app.listen(process.env.PORT || 8080, () =>
     console.log("Petition up and running....")

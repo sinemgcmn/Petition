@@ -101,7 +101,9 @@ app.post("/login", (req, res) => {
 
 ////////////PETITION///////////////////////////////
 app.get("/petition", (req, res) => {
-    if (req.session.signatureId) {
+    if (!req.session.userId && !req.session.signatureId) {
+        res.redirect("/register");
+    } else if (req.session.userId && req.session.signatureId) {
         res.redirect("/thanks");
     } else {
         res.render("petition");
@@ -170,7 +172,11 @@ app.get("/signers", (req, res) => {
 //////////////PROFILE/////////////////////////////
 
 app.get("/profile", (req, res) => {
-    res.render("profile");
+    if (!req.session.userId && !req.session.signatureId) {
+        res.redirect("/register");
+    } else {
+        res.render("profile");
+    }
 });
 
 app.post("/profile", (req, res) => {

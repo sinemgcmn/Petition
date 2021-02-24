@@ -199,6 +199,8 @@ app.post("/profile", (req, res) => {
 app.get("/signers/:city/", (req, res) => {
     if (!req.session.userId && !req.session.signatureId) {
         res.redirect("/register");
+    } else if (!req.session.signatureId) {
+        res.redirect("/petition");
     } else {
         const city = req.params.city;
         db.signersByCity(city)

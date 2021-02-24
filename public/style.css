@@ -13,12 +13,17 @@ p {
 }
 
 input {
-    font-size: 15px;
+    background-color: Transparent;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    font-size: 20px;
+    font-weight: bold;
     height: 40px;
     width: 200px;
     color: darkslategrey;
     margin: 0px 10px;
-    border-width: 2px;
+    border-width: 4px;
     border-color: darkslategrey;
 }
 
@@ -120,4 +125,10 @@ canvas {
     text-decoration: underline;
     font-size: 1.5em;
     font-weight: bold;
+}
+
+#loginNot {
+    text-decoration: none;
+    font-size: 15px;
+    color: rgb(204, 50, 199);
 }

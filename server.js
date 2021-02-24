@@ -264,7 +264,6 @@ app.post("/thanks", (req, res) => {
         delete req.session.userId;
         res.redirect("/login");
     } else if (req.body.button == "deleteAcc") {
-        console.log(userId);
         db.forgetUserSignature(userId);
         db.forgetUserProfile(userId);
         db.forgetUserId(userId);

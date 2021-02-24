@@ -33,6 +33,7 @@ input:focus {
     width: 120px;
     margin: 10px 10px;
     background-color: darkslategrey;
+    color: rgb(204, 50, 199);
 }
 
 .container {

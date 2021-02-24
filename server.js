@@ -157,6 +157,8 @@ app.get("/thanks", (req, res) => {
 app.get("/signers", (req, res) => {
     if (!req.session.userId && !req.session.signatureId) {
         res.redirect("/register");
+    } else if (!req.session.signatureId) {
+        res.redirect("/petition");
     } else if (req.session.userId && req.session.signatureId) {
         db.getAllSign()
             .then(({ rows }) => {

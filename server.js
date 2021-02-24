@@ -246,7 +246,8 @@ app.post("/profile/edit", (req, res) => {
 /////////////////SIGNATURE DELETE///////////////////
 app.post("/thanks", (req, res) => {
     db.deleteSign(req.session.userId);
-    req.session.signatureId = null;
+    // req.session.signatureId = null;
+    delete req.session.signatureId;
     res.redirect("/petition");
 });
 

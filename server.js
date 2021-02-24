@@ -132,6 +132,8 @@ app.post("/petition", (req, res) => {
 app.get("/thanks", (req, res) => {
     if (!req.session.userId && !req.session.signatureId) {
         res.redirect("/register");
+    } else if (!req.session.signatureId) {
+        res.redirect("/petition");
     } else if (req.session.userId && req.session.signatureId) {
         db.getNum()
             .then(({ rows }) => {

@@ -8,12 +8,16 @@ body {
     /* box-sizing: border-box; */
 }
 
+p {
+    font-weight: bold;
+}
+
 input {
     font-size: 15px;
     height: 40px;
     width: 200px;
     color: darkslategrey;
-    margin: 10px 10px;
+    margin: 0px 10px;
     border-width: 2px;
     border-color: darkslategrey;
 }
@@ -22,7 +26,7 @@ input:focus {
     outline-color: rgb(204, 50, 199);
 }
 
-button {
+.regButton {
     position: absolute;
     left: 45%;
     height: 40px;
@@ -49,7 +53,6 @@ button {
 .formPart {
     display: flex;
     justify-content: center;
-    position: relative;
     padding: 20px 30px;
 }
 
@@ -59,10 +62,9 @@ button {
     padding: 10px 0px;
 }
 
-#delete {
-    display: relative;
-    left: 37%;
-    color: darkslategrey;
+.delete {
+    margin-top: 20px;
+    color: darkorchid;
     border: none;
     text-decoration: underline;
     background-color: Transparent;
@@ -70,7 +72,6 @@ button {
     font-weight: bold;
     width: 350px;
     cursor: pointer;
-    overflow: hidden;
 }
 
 canvas {
@@ -90,4 +91,32 @@ canvas {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+#navThanks {
+    display: inline;
+    margin-left: 30px;
+    color: darkorchid;
+    text-decoration: underline;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+#navPet {
+    display: inline;
+    float: right;
+    margin-right: 30px;
+    color: darkorchid;
+    text-decoration: underline;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+#navCity {
+    display: inline;
+    margin-left: 30px;
+    color: darkorchid;
+    text-decoration: underline;
+    font-size: 1.5em;
+    font-weight: bold;
 }

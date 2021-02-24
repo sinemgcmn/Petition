@@ -246,16 +246,35 @@ app.post("/profile/edit", (req, res) => {
             });
         });
     }
-    res.redirect("/profile/edit");
+    res.render("edit", {
+        message: `We successfully updated your profile!!!`,
+    });
 });
 
 /////////////////SIGNATURE DELETE///////////////////
 app.post("/thanks", (req, res) => {
-    db.deleteSign(req.session.userId);
-    // req.session.signatureId = null;
-    delete req.session.signatureId;
-    res.redirect("/petition");
+    const userId = req.session.userId;
+
+    if (req.body.button == "deleteSig") {
+        db.deleteSign(userId);
+        delete req.session.signatureId;
+        res.redirect("/petition");
+    } else if (req.body.button == "logoutUser") {
+        delete req.session.signatureId;
+        delete req.session.userId;
+        res.redirect("/login");
+    } else if (req.body.button == "deleteAcc") {
+        console.log(userId);
+        db.forgetUserSignature(userId);
+        db.forgetUserProfile(userId);
+        db.forgetUserId(userId);
+        delete req.session.signatureId;
+        delete req.session.userId;
+        res.redirect("/register");
+    }
 });
+
+/////////////////LOGOUT////////////////////////////
 
 app.listen(process.env.PORT || 8080, () =>
     console.log("Petition up and running....")

@@ -5,7 +5,7 @@
     <h2>As of March 2021 NBC will not longer allow The Office to be streamed on Netflix but rather only on their own streaming platform!<br> </h2>
 </div>
 
-
+<h2 class="container" style="color:darkslategrey">{{message}}</h2>
 
 <form method='POST'>
 {{#allEditInfo}}
@@ -27,7 +27,10 @@
 {{/allEditInfo}}
 <input type="hidden" name="_csrf" value="{{csrfToken}}">
 <div>            
-<button class="click" type='submit' name="accept">UPDATE</button>
+<button class="regButton" type='submit' name="accept">UPDATE</button>
 </div>
 </div>
 </form>
+
+<a id="navThanks" href="/thanks">If you are already a supporter, go to 'Thanks' page!</a>
+<a id="navPet" href="/petition">If you are not a supporter yet, go to 'Petition' page!</a>

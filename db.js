@@ -172,3 +172,34 @@ module.exports.deleteSign = (userId) => {
     const params = userId;
     return db.query(q, params);
 };
+
+///forget user//////////
+module.exports.forgetUserId = (userId) => {
+    const q = `
+        DELETE
+        FROM users
+        WHERE id = ${userId};
+    `;
+    const params = userId;
+    return db.query(q, params);
+};
+
+module.exports.forgetUserSignature = (userId) => {
+    const q = `
+        DELETE
+        FROM signatures
+        WHERE userid = ${userId};
+    `;
+    const params = userId;
+    return db.query(q, params);
+};
+
+module.exports.forgetUserProfile = (userId) => {
+    const q = `
+        DELETE
+        FROM user_profiles
+        WHERE userid = ${userId};
+    `;
+    const params = userId;
+    return db.query(q, params);
+};

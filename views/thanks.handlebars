@@ -20,17 +20,25 @@
 <img src="https://i.gifer.com/origin/52/5216ae716f642a266b5654760a847319.gif" width=480 height=270.880 ></img>
 </div>
 
-
-
-
-<h2 class="container"><a href="/profile/edit" style="color:darkslategrey">Edit your profile</a></h2>
+<h2 class="container"><a href="/profile/edit" style="color:darkorchid">Edit your profile</a></h2>
 
 <form method='POST'>
+<div class="container">
 <div>            
-<button id="delete" type='submit' name="accept">Delete your signature</button>
+<button class="delete" type="submit" name="button" value="deleteSig">Delete my signature </button>
+</div>
+<div>     
+<button class="delete" type="submit" name="button" value="logoutUser">Log out</button>
+</div>  
+<div>      
+<button class="delete" type="submit" name="button" value="deleteAcc">Delete my account</button>
+</div>  
 <input type="hidden" name="_csrf" value="{{csrfToken}}">
 </div>
 </form>
+
+
+
 
 
 

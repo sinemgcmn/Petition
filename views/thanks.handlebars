@@ -16,11 +16,21 @@
 <h2 class="container" ><a href="/signers" class="thanksNum" style="color:rgb(204, 50, 199)">See all {{count}} The Office lovers & signers !!!</a></h2>
 {{/signersNum}}
 
-
 <div class="container">
 <img src="https://i.gifer.com/origin/52/5216ae716f642a266b5654760a847319.gif" width=480 height=270.880 ></img>
 </div>
 
+
+
+
+<h2 class="container"><a href="/profile/edit" style="color:darkslategrey">Edit your profile</a></h2>
+
+<form method='POST'>
+<div>            
+<button id="delete" type='submit' name="accept">Delete your signature</button>
+<input type="hidden" name="_csrf" value="{{csrfToken}}">
+</div>
+</form>
 
 
 

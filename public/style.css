@@ -2,6 +2,7 @@ body {
     background-image: url("office.jpg");
     background-size: cover;
     background-repeat: no-repeat;
+    background-attachment: fixed;
     color: white;
 
     /* box-sizing: border-box; */
@@ -39,7 +40,6 @@ button {
 
 .box {
     font-size: 20px;
-
     font-weight: bold;
     color: darkslategrey;
     position: relative;
@@ -59,10 +59,19 @@ button {
     padding: 10px 0px;
 }
 
-/* .click {
-    position: relative;
-    left: 160px;
-} */
+#delete {
+    display: relative;
+    left: 37%;
+    color: darkslategrey;
+    border: none;
+    text-decoration: underline;
+    background-color: Transparent;
+    font-size: 1.5em;
+    font-weight: bold;
+    width: 350px;
+    cursor: pointer;
+    overflow: hidden;
+}
 
 canvas {
     background-color: white;
@@ -77,7 +86,7 @@ canvas {
     height: 100px;
 }
 
-#edit {
+.edit {
     display: flex;
     flex-direction: column;
     align-items: center;

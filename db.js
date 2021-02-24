@@ -103,6 +103,8 @@ module.exports.signersByCity = (city) => {
     return db.query(q, params);
 };
 
+/////////////PART-5/////////////////
+
 module.exports.getInfoEdit = (userId) => {
     const q = `
         SELECT users.first_name, users.last_name,
@@ -154,6 +156,18 @@ module.exports.getPasswordwithId = (userId) => {
         SELECT password_hash
         FROM users  
         WHERE id = ${userId}
+    `;
+    const params = userId;
+    return db.query(q, params);
+};
+
+///delete signature////
+
+module.exports.deleteSign = (userId) => {
+    const q = `
+    DELETE 
+    FROM signatures 
+    WHERE userid = ${userId};
     `;
     const params = userId;
     return db.query(q, params);

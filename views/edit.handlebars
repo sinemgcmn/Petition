@@ -9,16 +9,25 @@
 
 <form method='POST'>
 {{#allEditInfo}}
+<div class="edit">
+<p style="color:darkslategrey">Name</p>
 <input type='text' name='first' autocomplete='off' value="{{first_name}}">
+<p style="color:darkslategrey">Surname</p>
 <input type='text' name='last' autocomplete='off' value="{{last_name}}">
+<p style="color:darkslategrey">Email</p>
 <input type='text' name='email' autocomplete='off' value="{{email}}">
+<p style="color:darkslategrey">Password</p>
 <input type='text' name='password' autocomplete='off' value="{{password}}">
+<p style="color:darkslategrey">Age</p>
 <input type='text' name='age' autocomplete='off' value="{{age}}">
+<p style="color:darkslategrey">City</p>
 <input type='text' name='city' autocomplete='off' value="{{city}}">
+<p style="color:darkslategrey">Homepage</p>
 <input type='text' name='homepage' autocomplete='off' value="{{url}}">
 {{/allEditInfo}}
 <input type="hidden" name="_csrf" value="{{csrfToken}}">
 <div>            
 <button class="click" type='submit' name="accept">UPDATE</button>
+</div>
 </div>
 </form>

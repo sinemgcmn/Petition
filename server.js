@@ -120,7 +120,6 @@ app.post("/petition", (req, res) => {
             res.redirect("/thanks"); //////????????????
         })
         .catch((err) => {
-            console.log(err);
             res.render("petition", {
                 warning: `Houston, we have a problem!!!
                         You should fill out the form!`,
@@ -131,21 +130,15 @@ app.post("/petition", (req, res) => {
 ////////////THANKS///////////////////////////////
 
 app.get("/thanks", (req, res) => {
-    console.log(req.session.signatureId);
     if (!req.session.userId && !req.session.signatureId) {
         res.redirect("/register");
     } else if (req.session.userId && req.session.signatureId) {
-        console.log("buraya");
         db.getNum()
             .then(({ rows }) => {
-                console.log(rows);
                 let signersNum = rows;
-                console.log(signersNum);
-                // console.log("signerNum:", signersNum);
                 db.getSign(req.session.userId)
                     .then(({ rows }) => {
                         let signs = rows;
-                        console.log("sdsd", req.session.userId);
                         res.render("thanks", {
                             signersNum,
                             signs,
@@ -193,7 +186,6 @@ app.post("/profile", (req, res) => {
     }
     db.reqUserInfo(age, city, urltoInsert, req.session.userId).then(
         ({ rows }) => {
-            console.log("rows: ", rows);
             req.session.userId = rows[0].userid;
             res.redirect("/login");
         }
@@ -205,7 +197,6 @@ app.get("/signers/:city/", (req, res) => {
         res.redirect("/register");
     } else {
         const city = req.params.city;
-        console.log(city);
         db.signersByCity(city)
             .then(({ rows }) => {
                 let allCityInfo = rows;
@@ -249,6 +240,14 @@ app.post("/profile/edit", (req, res) => {
             });
         });
     }
+    res.redirect("/profile/edit");
+});
+
+/////////////////SIGNATURE DELETE///////////////////
+app.post("/thanks", (req, res) => {
+    db.deleteSign(req.session.userId);
+    req.session.signatureId = null;
+    res.redirect("/petition");
 });
 
 app.listen(process.env.PORT || 8080, () =>
